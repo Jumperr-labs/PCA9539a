@@ -13,16 +13,6 @@ class iI2cSlaveBaseReadStreamV1 {
     ///         If less than \p size, the corresponding instance of iI2cSlaveBaseReadStream is no longer active and the write callback should return immediately.
     virtual size_t ReadAndSendAck(uint8_t *rx_buffer, size_t size) = 0;
 
-//    /// Sends a NACK signal to the master.
-//    /// After calling this function, the corresponding instance of iI2cSlaveBaseReadStream is no longer active and the write callback should return immediately.
-//    virtual void SendNack() = 0;
-
-//    /// Sends a ACK signal to the master.
-//    virtual void SendAck() = 0;
-
-//    /// \return true if a NACK signal was received during the current transaction, otherwise returns false.
-//    virtual bool ReceivedNack() = 0;
-
     /// \return true if a stop signal was received during the current transaction, otherwise returns false.
     virtual bool ReceivedStop() = 0;
 };
@@ -35,15 +25,6 @@ class iI2cSlaveBaseWriteStreamV1 {
     /// \return Number of bytes written to the I2C master.
     ///         If less than \p size, a NACK was received from the master.
     virtual size_t Write(uint8_t* tx_buffer, size_t size) = 0;
-
-//    /// Sends a NACK signal to the master.
-//    /// Should only be used once on callback entry.
-//    /// After calling this function, the corresponding instance of iI2cSlaveBaseReadStream is no longer active and the write callback should return immediately.
-//    virtual void SendNack() = 0;
-//
-//    /// Sends a ACK signal to the master.
-//    /// Should only be used once on callback entry.
-//    virtual void SendAck() = 0;
 
     /// \return true if a NACK was received during the current transaction, otherwise returns false.
     virtual bool ReceivedNack() = 0;
