@@ -12,7 +12,8 @@ For more information, visit [the docs](https://docs.jumper.io).
 - Fork [this repository](https://github.com/Jumperr-labs/PCA9539A) on GitHub and clone the new repository onto your Linux machine.
 - Make sure you have the build prerequisites by running the following:
   
-  ```bash
+  ```
+  bash
   cd /PATH/TO/PCA9539A/REPO
   make
   ```
@@ -21,7 +22,8 @@ For more information, visit [the docs](https://docs.jumper.io).
 - Copy the .so file from the "_build/" directory to your Jumper Virtual Lab working directory (same one as the "board.json" file).
 - Add the component to your "board.json" file:
 
-  ```json
+```
+json
 {
     "name": "PCA9539A",
     "id": 1,
@@ -53,7 +55,7 @@ For more information, visit [the docs](https://docs.jumper.io).
             "P17": 3
             }
         }
-	}
+}
   ```
 
 ## License
