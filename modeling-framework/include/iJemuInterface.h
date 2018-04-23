@@ -23,7 +23,7 @@ class iJemuV1 {
 
 class iJemuV2 : public iJemuV1 {
   public:
-    virtual void SetMultiplePinsLevel(WireChange* pin_changes_ptr, uint32_t size) = 0;
+    virtual void SetMultiplePinsLevel(WireChange* pin_changes_ptr, size_t size) = 0;
     virtual void SetPinDirection(uint32_t pin_id,  pin_direction_t direction, bool pullup) = 0;
     virtual void SetPinChangeLevelEventCallback(uint32_t pin_id, const PinChangeLevelEventCallback& callback) = 0;
 
