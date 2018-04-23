@@ -67,7 +67,7 @@ struct PinChangeLevelEventCallback {
     PinChangeLevelEventCallback(const pin_change_level_callback_t& pin_change_level_callback) :
         pin_change_level_callback_(pin_change_level_callback){}
 
-    void operator()(WireLogicLevelEvent* arr, int size) {
+    void operator()(WireLogicLevelEvent* arr, size_t size) {
         WireLogicLevelEventVector_t vec;
         std::copy(arr, arr + size, std::back_inserter(vec));
         pin_change_level_callback_(vec);

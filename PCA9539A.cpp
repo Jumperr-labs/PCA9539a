@@ -11,11 +11,11 @@ PCA9539A::PCA9539A() :
       port_made_int_(P0),
       i2c_slave_() {
         i2c_slave_ = CreateI2cSlave();
+        i2c_slave_->SetMasterReadCommandCallback(std::bind(&PCA9539A::OnMasterRead,this,std::placeholders::_1, std::placeholders::_2));
+        i2c_slave_->SetMasterWriteCommandCallback(std::bind(&PCA9539A::OnMasterWrite,this,std::placeholders::_1, std::placeholders::_2));
         InitializePins();
         SetDeviceAddress();
         is_reset_mode_ = GetPinLevel(reset_);
-        i2c_slave_->SetMasterReadCommandCallback(std::bind(&PCA9539A::OnMasterRead,this,std::placeholders::_1, std::placeholders::_2));
-        i2c_slave_->SetMasterWriteCommandCallback(std::bind(&PCA9539A::OnMasterWrite,this,std::placeholders::_1, std::placeholders::_2));
 }
 
 void PCA9539A::InitializePins() {

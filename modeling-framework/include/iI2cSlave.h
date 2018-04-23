@@ -42,17 +42,49 @@ typedef std::function<void(uint8_t, iI2cSlaveBaseReadStream&)> i2c_write_command
 /// Receives a iI2cSlaveBaseWriteStream.
 typedef std::function<void(uint8_t, iI2cSlaveBaseWriteStream&)> i2c_read_command_callback_t;
 
+struct iI2cMasterWriteCommandCallback {
+    virtual void OnMasterWriteCommandCallback(uint8_t address, iI2cSlaveBaseReadStream& stream) = 0 ;
+};
+
+template<class T>
+struct I2cMasterWriteCommandCallback : public iI2cMasterWriteCommandCallback{
+    I2cMasterWriteCommandCallback(const T& callback) : callback_(callback) {}
+    void OnMasterWriteCommandCallback(uint8_t address, iI2cSlaveBaseReadStream& stream) { callback_(address, stream); }
+    T callback_{};
+};
+
+struct iI2cMasterReadCommandCallback {
+    virtual void OnMasterReadCommandCallback(uint8_t address, iI2cSlaveBaseWriteStream& stream) = 0 ;
+};
+
+template<class T>
+struct I2cMasterReadCommandCallback : public iI2cMasterReadCommandCallback {
+    I2cMasterReadCommandCallback(const T& callback) : callback_(callback) {}
+    void OnMasterReadCommandCallback(uint8_t address, iI2cSlaveBaseWriteStream& stream) { callback_(address, stream); }
+    T callback_{};
+};
+
 class iI2cSlaveBaseV1 {
   public:
     /// Sets a callback to be called when the I2C master is attempting to write to the slave.
     /// \param callback
-    virtual void SetMasterWriteCommandCallback(i2c_write_command_callback_t callback) = 0;
+    template<class i2c_write_command_callback>
+    void SetMasterWriteCommandCallback( const i2c_write_command_callback& callback) {
+        I2cMasterWriteCommandCallback_ = new I2cMasterWriteCommandCallback<i2c_write_command_callback>(callback);
+    }
 
     /// Sets a callback to be called when the I2C master is attempting to read from the slave.
     /// \param callback
-    virtual void SetMasterReadCommandCallback(i2c_read_command_callback_t callback) = 0;
+    template<class i2c_read_command_callback>
+    void SetMasterReadCommandCallback(const i2c_read_command_callback& callback) {
+        I2cMasterReadCommandCallback_ = new I2cMasterReadCommandCallback<i2c_read_command_callback>(callback);;
+    }
 
     virtual void SetSlaveAddress(uint8_t address, uint8_t address_mask) = 0;
+    
+    iI2cMasterWriteCommandCallback* I2cMasterWriteCommandCallback_{};
+    iI2cMasterReadCommandCallback* I2cMasterReadCommandCallback_{};
 };
 
 typedef iI2cSlaveBaseV1 iI2cSlave;
+

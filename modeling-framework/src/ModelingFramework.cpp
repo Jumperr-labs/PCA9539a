@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include "iJemuInterface.h"
 #include <iostream>
+#include <memory>
 
 iJemuInterface *jemu_interface_ = nullptr;
 
@@ -103,9 +104,9 @@ void SetMultiplePinsLevel(const pin_level_changes_t& pin_changes) {
     if (pin_changes.empty()) 
         return;
 
-    WireChange pin_changes_arr[pin_changes.size()];
-    std::copy(pin_changes.begin(),pin_changes.end(), pin_changes_arr );
-    jemu_interface_->SetMultiplePinsLevel(pin_changes_arr, pin_changes.size());
+    std::unique_ptr<WireChange> arr(new WireChange[pin_changes.size()]);
+    std::copy(pin_changes.begin(),pin_changes.end(), arr.get() );
+    jemu_interface_->SetMultiplePinsLevel(arr.get(), pin_changes.size());
 }
 
 void SetPinDirection(uint32_t pin_id, pin_direction_t direction, bool pullup) {
